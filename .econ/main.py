@@ -15,12 +15,14 @@ class ImageConfiguration:
         self.root.title("Image Presentation App")
         self.root.geometry("1300x720")
         self.timer_id = None
-
-        self.start_button = tk.Button(self.root, text="Start", command=self.start_presentation_in_loop)
-        self.start_button.pack(side=tk.LEFT, padx=10, pady=10)
-
+        
         self.canvas = tk.Canvas(self.root,bg = "black")
         self.canvas.pack(padx=10, pady=10)
+
+        self.start_button = tk.Button(self.root, text="Start", command=self.start_presentation_in_loop)
+        self.start_button.pack(side=tk.BOTTOM, padx=10, pady=10)
+
+
         self.wait_for_input()
 
 
@@ -49,12 +51,13 @@ class ImageConfiguration:
             self.show_images_config()
         elif event.char.isdigit():  
             if 1 <= int(event.char) <= 5: 
-                self.user_data[self.index_images] = int(event.char)
+                self.user_data[self.index_images+1] = int(event.char)
                 with open(r"data.json", "r") as json_file:
                     data = json.load(json_file)
                 data[self.user] = self.user_data
                 with open(r"data.json", "w") as json_file:
                     json.dump(data, json_file, indent=4)
+                self.next_image()
 
 
     def next_image(self):
@@ -191,7 +194,7 @@ class Configuration:
         self.check_mouse_click_button.pack(side=tk.LEFT,padx=65, pady=10)
 
         self.canvas = tk.Canvas(self.root,bg = "black")
-        self.canvas.place(x=50, y=350,width=400)
+        self.canvas.place(x=50, y=350,width=400,height = 225)
 
     def close_app(self):
         self.root.destroy()
@@ -263,7 +266,7 @@ class Configuration:
             else:
                 new_height = max_canvas_height
                 new_width = int(new_height * aspect_ratio)
-            image = image.resize((new_width, new_height))
+            image = image.resize((400, 255))
 
         img = ImageTk.PhotoImage(image)
         self.canvas.config(width=image.width, height=image.height)
